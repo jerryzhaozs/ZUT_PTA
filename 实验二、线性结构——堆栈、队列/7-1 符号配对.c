@@ -55,18 +55,20 @@ void outtail(List L){
         p->next=NULL;
     }
 }
-void goo(List L){
+void back(List L){
     char c=gettail(L);
-    if(c=='a'){
-        printf("NO\n/*-?");
-    }
+    if(c=='a') printf("NO\n/*-?");
     if(c=='(') printf("NO\n(-?");
     if(c=='[') printf("NO\n[-?");
     if(c=='{') printf("NO\n{-?");
+}dw
+char transChar(char a){
+    if(a=='}') return '{';
+    if(a==']') return '[';
+    if(a==')') return '(';
 }
 int main(){
     List L=init();
-
     while(1==1){
         char str[1024];
         scanf("%[^\n]",&str);
@@ -74,21 +76,13 @@ int main(){
         if(str[0]=='.'&&str[1]=='\0') break;
         for(int i=0;str[i]!='\0';i++){
             if(str[i]=='/'&&str[i+1]=='*'){
-                // printf("HO thist");
                 inserttail(L,'a');
                 i++;
                 continue;
             }
-            if(str[i]=='('){
-                inserttail(L,'(');
-            }
-            if(str[i]=='['){
-                inserttail(L,'[');
-            }
-            if(str[i]=='{'){
-                inserttail(L,'{');
-            }
-
+            if(str[i]=='(') inserttail(L,'(');
+            if(str[i]=='[') inserttail(L,'[');
+            if(str[i]=='{') inserttail(L,'{');
 
             if(str[i]=='*'&&str[i+1]=='/'){
                 char fi=gettail(L);
@@ -97,53 +91,16 @@ int main(){
                     i++;
                     continue;
                 }else{
-                    if(L->len==0){
-                        printf("NO\n?-*/");
-                    }else{
-                        goo(L);
-                    }
+                    if(L->len==0) printf("NO\n?-*/");
+                    else back(L);
                     return 0;
                 }
-            }
-            if(str[i]==')'){
+            }else if(str[i]==')'||str[i]==']'||str[i]=='}'){
                 char fi=gettail(L);
-                if(fi=='('){
-                    outtail(L);
-                    continue;
-                }else{
-                    if(L->len==0){
-                        printf("NO\n?-)");
-                    }else{
-                        goo(L);
-                    }
-                    return 0;
-                }
-            }
-            if(str[i]==']'){
-                char fi=gettail(L);
-                if(fi=='['){
-                    outtail(L);
-                    continue;
-                }else{
-                    if(L->len==0){
-                        printf("NO\n?-]");
-                    }else{
-                        goo(L);
-                    }
-                    return 0;
-                }
-            }
-            if(str[i]=='}'){
-                char fi=gettail(L);
-                if(fi=='{'){
-                    outtail(L);
-                    continue;
-                }else{
-                    if(L->len==0){
-                        printf("NO\n?-}");
-                    }else{
-                        goo(L);
-                    }
+                if(fi==transChar(str[i])) outtail(L);
+                else{
+                    if(L->len==0) printf("NO\n?-%c",str[i]);
+                    else back(L);
                     return 0;
                 }
             }
@@ -151,19 +108,11 @@ int main(){
     }
     if(L->len!=0){
         printf("NO\n");
-        // if(L->len!=1){
-        //     outtail(L);
-        // }
         char la=L->tail->data;
-        if(la=='a'){
-            printf("/*-?");
-        }else if(la=='('){
-            printf("(-?");
-        }else if(la=='['){
-            printf("[-?");
-        }else if(la=='{'){
-            printf("{-?");
-        }
+        if(la=='a') printf("/*-?");
+        else if(la=='(') printf("(-?");
+        else if(la=='[') printf("[-?");
+        else if(la=='{') printf("{-?");
         return 0;
     }
     printf("YES");
